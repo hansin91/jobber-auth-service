@@ -10,7 +10,7 @@ import { Logger } from 'winston';
 import cors from 'cors';
 import { verify } from 'jsonwebtoken';
 import compression from 'compression';
-import { checkConnection } from '@auth/elasticsearch';
+import { checkConnection, createIndex } from '@auth/elasticsearch';
 import { appRoutes } from '@auth/routes';
 import { Channel } from 'amqplib';
 import { createConnection } from '@auth/queues/connection';
@@ -68,6 +68,7 @@ const startQueues = async (): Promise<void> => {
 
 const startElasticSearch = (): void => {
   checkConnection();
+  createIndex('gigs');
 };
 
 const authErrorHandler = (app: Application): void => {

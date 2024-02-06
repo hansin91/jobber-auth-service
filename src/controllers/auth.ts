@@ -1,5 +1,5 @@
 import { signupSchema } from '@auth/schemes/signup';
-import { createAuthUser, getAuthUserById, getAuthUserByVerificationToken, getUserByEmail, getUserByUsername, getUserByUsernameOrEmail, signToken, updateVerifyEmailField } from '@auth/services/auth.service';
+import { createAuthUser, getAuthUserById, getAuthUserByVerificationToken, getUserByEmail, getUserByUsername, signToken, updateVerifyEmailField } from '@auth/services/auth.service';
 import { BadRequestError, IAuthDocument, IEmailMessageDetails, firstLetterUppercase, isEmail, uploadFile } from '@hansin91/jobber-shared';
 import { CloudinaryUpload } from '@hansin91/jobber-shared/src/cloudinary-upload';
 import { UploadApiResponse } from 'cloudinary';
@@ -14,6 +14,7 @@ import { AuthModel } from '@auth/models/auth.schema';
 import { omit } from 'lodash';
 import { ObjectSchema } from 'joi';
 import { generateRandomCharacters } from '@auth/helpers';
+import { checkIfUserExists } from '@auth/validators';
 
 class AuthController {
 
@@ -69,7 +70,7 @@ class AuthController {
       await this.validateRequest(req);
 
       const { username, email, password, country, profilePicture } = req.body;
-      await this.checkIfUserExists(username, email);
+      await checkIfUserExists(username, email);
 
       const profilePublicId = uuidV4();
       const uploadResult = await this.uploadProfilePicture(profilePicture, profilePublicId);
@@ -94,13 +95,6 @@ class AuthController {
     if (error?.details) {
       const errorMessage = action === 'signup' ? 'SignUp create()' : 'Signin read()';
       throw new BadRequestError(error.details[0].message, `${errorMessage} method error`);
-    }
-  };
-
-  private checkIfUserExists = async (username: string, email: string): Promise<void> => {
-    const checkIfUserExist = await getUserByUsernameOrEmail(username, email);
-    if (checkIfUserExist) {
-      throw new BadRequestError('Username or email already registered', 'SignUp create() method error');
     }
   };
 
