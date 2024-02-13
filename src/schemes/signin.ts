@@ -21,6 +21,9 @@ const signinSchema: ObjectSchema = Joi.object().keys({
     'string.max': 'Maximum character is 12',
     'string.empty': 'Password must be not empty'
   }),
+  action: Joi.string().required().messages({
+    'string.base': 'Action required'
+  })
 });
 
 export { signinSchema };

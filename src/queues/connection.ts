@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'authQueueConnection', 'debug');
 
-async function createConnection(): Promise<Channel | undefined> {
+const createConnection =  async (): Promise<Channel | undefined> => {
   try {
     const connection: Connection = await client.connect(`${config.RABBITMQ_ENDPOINT}`);
     const channel: Channel = await connection.createChannel();
@@ -16,13 +16,13 @@ async function createConnection(): Promise<Channel | undefined> {
     log.log('error', 'AuthService createConnection() method error:', error);
     return undefined;
   }
-}
+};
 
-function closeConnection(channel: Channel, connection: Connection): void {
+const closeConnection = (channel: Channel, connection: Connection): void => {
   process.once('SIGINT', async () => {
     await channel.close();
     await connection.close();
   });
-}
+};
 
 export { createConnection };
