@@ -1,19 +1,11 @@
 import { elasticSearchClient, getDocumentById } from '@auth/elasticsearch';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import { IHitsTotal, IPaginateProps, IQueryList, ISearchResult, ISellerGig } from '@hansin91/jobber-shared';
+import { IHitsTotal, IQueryList, ISearchGig, ISearchResult, ISellerGig } from '@hansin91/jobber-shared';
 
 export const getGigById = async (index: string, gigId: string): Promise<ISellerGig> => {
   const gig = await getDocumentById(index, gigId);
   return gig;
 };
-
-export interface ISearchGig {
-  searchQuery: string;
-  paginate: IPaginateProps;
-  deliveryTime?: string;
-  min?: number;
-  max?: number;
-}
 
 export const searchGigs = async (param: ISearchGig): Promise<ISearchResult> => {
   const { paginate, searchQuery, min, max, deliveryTime } = param;

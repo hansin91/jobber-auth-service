@@ -21,7 +21,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^8.11.0",
     "@faker-js/faker": "^8.4.0",
-    "@hansin91/jobber-shared": "^0.0.7",
+    "@hansin91/jobber-shared": "^0.0.12",
     "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.0.0",
